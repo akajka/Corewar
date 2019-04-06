@@ -40,6 +40,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -rf *.o
 	@rm -rf $(OBJ_D)
 
 re: fclean all

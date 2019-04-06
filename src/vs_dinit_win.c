@@ -6,17 +6,15 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:21:56 by akorobov          #+#    #+#             */
-/*   Updated: 2019/03/28 13:36:14 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/04/05 19:04:59 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	dinit_win()
+void	dinit_win(void)
 {
-	while (getch() != 27)
-		;
 	endwin();
-	system("killall afplay");
+	system("killall sh music.sh afplay");
 	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: ybuhai <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 15:37:48 by ybuhai            #+#    #+#             */
-/*   Updated: 2019/03/27 18:45:18 by ybuhai           ###   ########.fr       */
+/*   Updated: 2019/04/06 11:36:55 by ybuhai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	add_players_without_numbers(t_cor *cor)
 		tmp = tmp->next;
 	}
 	if (i < 1 || i > MAX_PLAYERS)
-		error_case(USAGE);
+		print_help();
 	i = -1;
 	flag = 0;
 	while (++i < MAX_PLAYERS)
@@ -52,10 +52,9 @@ void	add_players_without_numbers(t_cor *cor)
 		if (cor->heroes[i].file == NULL)
 			flag++;
 		if (cor->heroes[i].file && flag)
-			error_case(USAGE);
+			print_help();
 	}
 	tmp = cor->list;
-	i = 0;
 }
 
 void	set_players(t_cor *cor)
@@ -77,7 +76,7 @@ void	set_players(t_cor *cor)
 					cor->count_heroes++;
 				}
 				else
-					error_case(USAGE);
+					print_help();
 			}
 			tmp = tmp->next;
 		}

@@ -6,33 +6,60 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 16:43:44 by akorobov          #+#    #+#             */
-/*   Updated: 2019/03/28 15:29:31 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/04/05 19:07:07 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	update_arena(t_cor *cor)
+void			cursor_plus(t_cor *cor)
+{
+	t_cursor	*cur;
+
+	cur = cor->cursor;
+	while (cur)
+	{
+		if (cor->field[cur->pos % MEM_SIZE] < 5)
+			cor->field[cur->pos % MEM_SIZE] += 5;
+		cur = cur->next;
+	}
+}
+
+void			cursor_noun(t_cor *cor)
+{
+	t_cursor	*cur;
+
+	cur = cor->cursor;
+	while (cur)
+	{
+		if (cor->field[cur->pos % MEM_SIZE] > 4)
+			cor->field[cur->pos % MEM_SIZE] -= 5;
+		cur = cur->next;
+	}
+}
+
+void			update_arena(t_cor *cor)
 {
 	int x;
 	int y;
 	int i;
 
-	i = 0;
+	i = -1;
 	x = 2;
 	y = 0;
-	wattroff(g_win_arena, A_BOLD);
-	while (i < MEM_SIZE)
+	cursor_plus(cor);
+	while (++i < MEM_SIZE)
 	{
-		if (i % 64 == 0)
-		{
-			y++;
+		wattron(g_win_arena, COLOR_PAIR(16));
+		if (i % 64 == 0 && ++y)
 			x = 2;
-		}
+		if (cor->field[i])
+			wattron(g_win_arena, COLOR_PAIR(cor->field[i]));
 		mvwprintw(g_win_arena, y, x, "%02x", cor->stage[i]);
 		x += 3;
-		i++;
 	}
-	refresh();
-	wrefresh(g_win_arena);
+	cursor_noun(cor);
+	update(g_win_arena);
+	key_control();
+	usleep(g_delay);
 }

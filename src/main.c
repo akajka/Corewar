@@ -6,60 +6,38 @@
 /*   By: ybuhai <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 18:11:07 by ybuhai            #+#    #+#             */
-/*   Updated: 2019/03/28 15:27:41 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/04/06 12:23:33 by ybuhai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	heroes_to_null(t_cor *cor)
+void	error_case(char *str)
 {
-	int i;
-
-	i = 0;
-	while (i < MAX_PLAYERS)
+	if (str)
 	{
-		cor->heroes[i].name = NULL;
-		cor->heroes[i].file = NULL;
-		i++;
+		ft_printf("usage corewar:\n\n\tprint symbols:\t\t-a\n\n");
+		ft_printf("\tlog level:\n\t\t-l 1 \n\t\t-l 2\n\n");
+		ft_printf("\tprint memory\n\t\t-d N\n\t\t--dump N\n\n");
+		ft_printf("\tvisual:\n\t\t-v\n\n");
+		ft_printf("\tset number of player:\n\t\t-n N\n\n");
 	}
-}
-
-void	map_init(t_cor *cor)
-{
-	cor->count_heroes = 0;
-	cor->visual = 0;
-	cor->dump_cycle = -2;
-	cor->list = NULL;
-	heroes_to_null(cor);
-}
-
-void	print_data(t_cor *cor)
-{
-	int i;
-
-	if (cor->visual)
-		ft_printf("Visual\n");
-	if (cor->dump_cycle >= 0)
-		ft_printf("Dump after %i cycles\n", cor->dump_cycle);
-	ft_printf("%i heroes\n", cor->count_heroes);
-	i = -1;
-	while (++i < cor->count_heroes)
-		ft_printf("Hero %i file %s\nname \"%s\"\ncomment (\"%s\")\nsize %i\n\n\n\n", i + 1, cor->heroes[i].file, cor->heroes[i].name, cor->heroes[i].comment, cor->heroes[i].size);
-	ft_memset(cor->stage, 0, MEM_SIZE);
-//	print_arena(cor->stage, 32);
+	exit(1);
 }
 
 int		main(int argc, char **argv)
 {
 	t_cor cor;
 
-	map_init(&cor);
+	ft_bzero(&cor, sizeof(t_cor));
+	cor.dump_cycle = -2;
+	cor.cycles_to_die = CYCLE_TO_DIE;
 	read_flags(&cor, argc, argv);
 	validate_heroes(&cor);
-	print_data(&cor);
-	init_win(&cor);
-	update_arena(&cor);
-	dinit_win();
-	system("leaks corewar");
+	init_game(&cor);
+	print_players(&cor);
+	if (cor.visual == 1)
+		init_win(&cor);
+	full_game(&cor);
+	print_last_alive(&cor);
 }
